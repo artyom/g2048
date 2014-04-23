@@ -49,23 +49,3 @@ Shiftloop:
 	}
 	return arr
 }
-
-// ShiftLeft2 takes slice and moves all non-zero values to the left, "bubbling"
-// zeroes to the right side of slice
-//
-// Note: passed slice is also modified (its underlying array would change).
-func ShiftLeft2(arr []int) []int {
-	// new slice for the same underlying array, modifying this slice would
-	// change arr values as well
-	nonEmpty := arr[:0]
-	for _, v := range arr {
-		if v == 0 {
-			continue
-		}
-		nonEmpty = append(nonEmpty, v)
-	}
-	for len(nonEmpty) < cap(nonEmpty) {
-		nonEmpty = append(nonEmpty, 0)
-	}
-	return nonEmpty
-}

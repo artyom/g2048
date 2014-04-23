@@ -40,20 +40,3 @@ func BenchmarkShiftLeft(b *testing.B) {
 		ShiftLeft(arr)
 	}
 }
-
-func ExampleShiftLeft2() {
-	s1 := []int{0, 1, 0, 1, 2, 2, 4, 0, 3}
-	s2 := ShiftLeft2(s1)
-	fmt.Println(s1)
-	fmt.Println(s2)
-	// Output:
-	// [1 1 2 2 4 3 0 0 0]
-	// [1 1 2 2 4 3 0 0 0]
-}
-
-func BenchmarkShiftLeft2(b *testing.B) {
-	arr := []int{0, 1, 0, 1, 2, 2, 4, 0, 3}
-	for i := 0; i < b.N; i++ {
-		ShiftLeft2(arr)
-	}
-}
