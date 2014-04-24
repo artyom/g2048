@@ -54,6 +54,8 @@ func TestBoard_Move(t *testing.T) {
 	t.Log("\n", b.Human())
 
 	t.Log("Game win test")
+	b.gameOver = false
+	b.gameWon = false
 	b.values = [16]int{
 		1024, 2, 8, 16,
 		1024, 4, 32, 128,
@@ -77,6 +79,8 @@ func TestBoard_Move(t *testing.T) {
 	}
 
 	t.Log("Game lose test")
+	b.gameOver = false
+	b.gameWon = false
 	b.values = [16]int{
 		512, 2, 8, 16,
 		1024, 4, 32, 4,
@@ -100,6 +104,8 @@ func TestBoard_Move(t *testing.T) {
 	}
 
 	t.Log("Board full test")
+	b.gameOver = false
+	b.gameWon = false
 	b.values = [16]int{
 		512, 2, 8, 16,
 		1024, 4, 32, 4,

@@ -27,12 +27,34 @@ const (
 	Right Move = iota
 )
 
+type GameStatus struct {
+	Over  bool // game finished
+	Won   bool // game won
+	Score int  // current score
+	Moves int  // moves made
+}
+
+// Status returns current game status
+func (b Board) Status() GameStatus {
+	b.RLock()
+	defer b.RUnlock()
+	return GameStatus{
+		Over:  b.gameOver,
+		Won:   b.gameWon,
+		Score: b.score,
+		Moves: b.moves,
+	}
+}
+
 // Board represents 2048 game board and its state
 type Board struct {
 	sync.RWMutex
-	values [16]int
-	rand   *rand.Rand
-	score  int
+	values   [16]int
+	rand     *rand.Rand
+	score    int
+	moves    int // moves made
+	gameOver bool
+	gameWon  bool
 
 	indexes []int // unoccupied indexes
 }
@@ -69,6 +91,13 @@ func (b Board) Score() int {
 func (b *Board) Move(direction Move) error {
 	b.Lock()
 	defer b.Unlock()
+	switch {
+	case b.gameOver && b.gameWon:
+		return WinGameError
+	case b.gameOver:
+		return EndOfGameError
+	}
+	b.moves++
 	switch direction {
 	case Left:
 	case Right:
@@ -100,6 +129,8 @@ func (b *Board) Move(direction Move) error {
 	// check if this move reaches the goal
 	for _, v := range b.values {
 		if v == 2048 {
+			b.gameOver = true
+			b.gameWon = true
 			return WinGameError
 		}
 	}
@@ -139,6 +170,7 @@ func (b *Board) Move(direction Move) error {
 		}
 	}
 	// no equal adjacent cells found, no free cells -- game over
+	b.gameOver = true
 	return EndOfGameError
 }
 
